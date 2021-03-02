@@ -1,0 +1,22 @@
+server:
+  port: 8084
+
+spring:
+  application:
+    name: event-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      host: localhost
+      discovery:
+        port: 8084
+        instance-id: ${spring.application.name}:1
+        service-name: event-service
+        prefer-ip-address: true
+kafka:
+  server: localhost:9092
+  group:
+    id: kilopo.event.consumer
+

@@ -1,0 +1,74 @@
+version: '3'
+services:
+  consul:
+    image: consul:1.7
+    network_mode: host
+  config:
+    image: openjdk:14-alpine
+    volumes:
+      - "./config/build/libs/config-0.0.1-SNAPSHOT.jar:/config.jar"
+    ports:
+      - 8888:8888
+    command: "java -jar config.jar"
+
+  product:
+    image: openjdk:14-alpine
+    restart: always
+    command: bash -c "cd ./product-service && ./gradlew clean build"
+    volumes:
+      - "./product-service/build/libs/product-service-0.0.1-SNAPSHOT.jar:/product.jar"
+    ports:
+      - 8081:8081
+    command: "java -jar product.jar"
+
+  promotion:
+    image: openjdk:14-alpine
+    restart: always
+    volumes:
+      - "./promotion-service/build/libs/promotion-service-0.0.1-SNAPSHOT.jar:/promotion.jar"
+    ports:
+      - 8082:8082
+    command: "java -jar promotion.jar"
+
+  storefront:
+    image: openjdk:14-alpine
+    restart: always
+    volumes:
+      - "./storefront-service/build/libs/storefront-service-0.0.1-SNAPSHOT.jar:/storefront.jar"
+    ports:
+      - 8083:8083
+    command: "java -jar storefront.jar"
+
+  event:
+    image: openjdk:14-alpine
+    restart: always
+    volumes:
+      - "./event-service/build/libs/event-service-0.0.1-SNAPSHOT.jar:/event.jar"
+    ports:
+      - 8084:8084
+    command: "java -jar event.jar"
+
+  api-gateway:
+    image: openjdk:14-alpine
+    restart: always
+    volumes:
+      - "./api-gateway/build/libs/api-gateway-0.0.1-SNAPSHOT.jar:/api-gateway.jar"
+    ports:
+      - 8080:8080
+    command: "java -jar api-gateway.jar"
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    restart: always
+    expose:
+      - 2181
+  kafka:
+    image: wurstmeister/kafka
+    restart: always
+    ports:
+      - 9096:9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 172.17.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

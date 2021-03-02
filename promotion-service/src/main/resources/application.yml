@@ -1,0 +1,17 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: promotion-service
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      host: localhost
+      discovery:
+        port: 8082
+        instance-id: ${spring.application.name}:1
+        service-name: promotion-service
+        prefer-ip-address: true

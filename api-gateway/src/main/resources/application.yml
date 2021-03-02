@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    consul:
+      host: localhost
+      discovery:
+        port: 8080
+        instance-id: ${spring.application.name}:1
+        service-name: api-gateway
+        prefer-ip-address: true
+    #        enabled: true
+    #        register: false
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+
+
+management.endpoints.web.exposure.include: '*'
+
+spring.cloud.gateway.discovery.locator.lower-case-service-id: true
