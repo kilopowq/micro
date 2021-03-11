@@ -1,17 +1,6 @@
 server:
   port: 8888
 
-#spring:
-#  cloud:
-#    config:
-#      server:
-#        git:
-#          uri: git@github.com:kilopowq/config-server.git
-#          strictHostKeyChecking: false
-#          username: kilopowq
-#          password: Kilopo_7520
-##          skipSslValidation: true
-
 
 spring:
   application:
